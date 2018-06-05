@@ -1,0 +1,146 @@
+	.file	"ex2.c"
+	.text
+	.globl	compare
+	.type	compare, @function
+compare:
+.LFB0:
+	.cfi_startproc
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register 6
+	movq	%rdi, -24(%rbp)
+	movq	%rsi, -32(%rbp)
+	movl	$0, -4(%rbp)
+	movq	-24(%rbp), %rax
+	movzbl	5(%rax), %edx
+	movq	-32(%rbp), %rax
+	movzbl	5(%rax), %eax
+	cmpb	%al, %dl
+	jne	.L2
+	movq	-24(%rbp), %rax
+	movzbl	4(%rax), %edx
+	movq	-32(%rbp), %rax
+	movzbl	4(%rax), %eax
+	cmpb	%al, %dl
+	jne	.L2
+	movq	-24(%rbp), %rax
+	movl	(%rax), %edx
+	movq	-32(%rbp), %rax
+	movl	(%rax), %eax
+	cmpl	%eax, %edx
+	jne	.L2
+	movl	$1, -4(%rbp)
+.L2:
+	movl	-4(%rbp), %eax
+	popq	%rbp
+	.cfi_def_cfa 7, 8
+	ret
+	.cfi_endproc
+.LFE0:
+	.size	compare, .-compare
+	.section	.rodata
+.LC0:
+	.string	"Ernesto"
+.LC1:
+	.string	"Borges"
+.LC2:
+	.string	"Cecilia"
+.LC3:
+	.string	"%s nasceu no mesmo dia de %s\n"
+	.text
+	.globl	main
+	.type	main, @function
+main:
+.LFB1:
+	.cfi_startproc
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register 6
+	subq	$80, %rsp
+	movq	%fs:40, %rax
+	movq	%rax, -8(%rbp)
+	xorl	%eax, %eax
+	movq	$.LC0, -64(%rbp)
+	movl	$2002, -56(%rbp)
+	movb	$3, -52(%rbp)
+	movb	$15, -51(%rbp)
+	movq	$.LC1, -32(%rbp)
+	movl	$2002, -24(%rbp)
+	movb	$3, -20(%rbp)
+	movb	$15, -19(%rbp)
+	movq	$.LC2, -48(%rbp)
+	movl	$2001, -40(%rbp)
+	movb	$8, -36(%rbp)
+	movb	$2, -35(%rbp)
+	movl	$0, -72(%rbp)
+	jmp	.L5
+.L10:
+	movl	$0, -68(%rbp)
+	jmp	.L6
+.L9:
+	movl	-72(%rbp), %eax
+	cmpl	-68(%rbp), %eax
+	je	.L13
+	leaq	-64(%rbp), %rax
+	movl	-68(%rbp), %edx
+	movslq	%edx, %rdx
+	salq	$4, %rdx
+	addq	%rdx, %rax
+	leaq	8(%rax), %rdx
+	leaq	-64(%rbp), %rax
+	movl	-72(%rbp), %ecx
+	movslq	%ecx, %rcx
+	salq	$4, %rcx
+	addq	%rcx, %rax
+	addq	$8, %rax
+	movq	%rdx, %rsi
+	movq	%rax, %rdi
+	call	compare
+	testl	%eax, %eax
+	je	.L8
+	movl	-68(%rbp), %eax
+	cltq
+	salq	$4, %rax
+	addq	%rbp, %rax
+	subq	$64, %rax
+	movq	(%rax), %rdx
+	movl	-72(%rbp), %eax
+	cltq
+	salq	$4, %rax
+	addq	%rbp, %rax
+	subq	$64, %rax
+	movq	(%rax), %rax
+	movq	%rax, %rsi
+	movl	$.LC3, %edi
+	movl	$0, %eax
+	call	printf
+	jmp	.L8
+.L13:
+	nop
+.L8:
+	addl	$1, -68(%rbp)
+.L6:
+	cmpl	$2, -68(%rbp)
+	jle	.L9
+	addl	$1, -72(%rbp)
+.L5:
+	cmpl	$2, -72(%rbp)
+	jle	.L10
+	movl	$0, %eax
+	movq	-8(%rbp), %rsi
+	xorq	%fs:40, %rsi
+	je	.L12
+	call	__stack_chk_fail
+.L12:
+	leave
+	.cfi_def_cfa 7, 8
+	ret
+	.cfi_endproc
+.LFE1:
+	.size	main, .-main
+	.ident	"GCC: (Ubuntu 5.4.0-6ubuntu1~16.04.9) 5.4.0 20160609"
+	.section	.note.GNU-stack,"",@progbits
